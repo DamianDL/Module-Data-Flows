@@ -1,6 +1,6 @@
 let myLibrary = [];
 
-window.addEventListener("load", function (e) {
+window.addEventListener("load", function () {
   populateStorage();
   render();
 });
@@ -16,7 +16,6 @@ function populateStorage() {
     );
     myLibrary.push(book1);
     myLibrary.push(book2);
-    render();
   }
 }
 
