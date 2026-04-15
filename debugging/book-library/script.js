@@ -19,26 +19,35 @@ function populateStorage() {
   }
 }
 
-const title = document.getElementById("title");
-const author = document.getElementById("author");
-const pages = document.getElementById("pages");
-const check = document.getElementById("check");
+const titleInput = document.getElementById("title");
+const authorInput = document.getElementById("author");
+const pagesInput = document.getElementById("pages");
+const checkInput = document.getElementById("check");
 
 //check the right input from forms and if its ok -> add the new book (object in array)
 //via Book function and start render function
 function submit() {
-  if (
-    title.value == null ||
-    title.value == "" ||
-    author.value == null ||
-    author.value == "" ||
-    pages.value == null ||
-    pages.value == ""
-  ) {
-    alert("Please fill all fields!");
+  const title = titleInput.value.trim();
+  const author = authorInput.value.trim();
+  const pages = pagesInput.valueAsNumber;
+
+  if (!title) {
+    alert("Please enter a valid title.");
+    return false;
+  }
+
+  if (!author) {
+    alert("Please enter a valid author.");
+    return false;
+  }
+
+  if (!Number.isInteger(rawPages) || rawPages <= 0) {
+    alert("Please enter a valid page number.");
     return false;
   } else {
-    let book = new Book(title.value, author.value, pages.value, check.checked);
+    titleInput.value = title;
+    authorInput.value = author;
+    let book = new Book(title, author, pages, checkInput.checked);
     myLibrary.push(book);
     render();
   }
@@ -76,12 +85,7 @@ function render() {
     changeBut.id = i;
     changeBut.className = "btn btn-success";
     wasReadCell.appendChild(changeBut);
-    let readStatus = "";
-    if (myLibrary[i].check == true) {
-      readStatus = "Yes";
-    } else {
-      readStatus = "No";
-    }
+    let readStatus = myLibrary[i].check == true ? "Yes" : "No";
     changeBut.innerText = readStatus;
 
     changeBut.addEventListener("click", function () {
@@ -90,12 +94,12 @@ function render() {
     });
 
     //add delete button to every row and render again
-    let delButton = document.createElement("button");
-    delButton.id = i + 5;
-    deleteCell.appendChild(delButton);
-    delButton.className = "btn btn-warning";
-    delButton.innerHTML = "Delete";
-    delButton.addEventListener("click", function () {
+    let deleteBut = document.createElement("button");
+    deleteBut.id = i + 5;
+    deleteCell.appendChild(deleteBut);
+    deleteBut.className = "btn btn-warning";
+    deleteBut.innerHTML = "Delete";
+    deleteBut.addEventListener("click", function () {
       alert(`You've deleted title: ${myLibrary[i].title}`);
       myLibrary.splice(i, 1);
       render();
